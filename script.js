@@ -54,7 +54,7 @@ const PROJECTS = [
     files: [
       {
         label: { en: "View Interactive Figma Portal", he: "צפייה בפורטל האינטראקטיבי" },
-        href: "https://www.figma.com/make/YXnO9ge45uM40lxebFCWun/User-portal?t=SeoNHT39TxdLHlGj-1",
+        href: "https://steam-method-30719162.figma.site/portal",
         external: true,
         embed: true
       }
