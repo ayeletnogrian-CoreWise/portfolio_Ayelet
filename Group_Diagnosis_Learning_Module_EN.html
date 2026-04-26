@@ -1,0 +1,2853 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>אבחון קבוצות — לומדה דיגיטלית</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="deck-stage.js"></script>
+
+<script type="application/json" id="speaker-notes">
+[
+  "ברוכים הבאים ללומדה אבחון קבוצות. הלומדה מיועדת למנהלים, מנחים, HR ואנשי פיתוח ארגוני שרוצים להבין את הדינמיקה הנסתרת בקבוצות שהם עובדים איתן.",
+  "בלומדה זו נעבור על ארבע עדשות מרכזיות, נבחין בין ביטחון פסיכולוגי לאקלים פסיכו-סוציאלי, ונבין כיצד מנגנוני הגנה כמו פיצול והשלכה פועלים בקבוצה.",
+  "אבחון קבוצתי אינו רק כלי אנליטי — הוא מיומנות מעשית שמאפשרת התערבות מדויקת. השאלות המנחות כאן הן הבסיס לכל אבחון ראשוני.",
+  "ארבע העדשות מאפשרות לנו לראות את הקבוצה בו-זמנית מזוויות שונות. שום עדשה לבדה אינה מספקת — האבחון האמיתי נמצא בחיבור ביניהן.",
+  "ההבחנה בין psychological safety לבין psychosocial safety climate היא קריטית: האחד נוגע לחוויה הפנימית בקבוצה, השני — למסר שהמערכת הרחבה משדרת.",
+  "זהויות חברתיות הן לא רק רקע — הן פועלות בחדר ומשפיעות על מי מדבר, מי נשמע ומי נשאר בשוליים. אבחון טוב חייב לכלול מבט על דינמיקות אלה.",
+  "מראה קבוצתית, פיצול והשלכה הם מושגים פסיכואנליטיים שמאפשרים לנו להבין לא רק מה נאמר — אלא מה הקבוצה לא יכולה להגיד ישירות.",
+  "בזמן משבר, המנחה עצמו פועל בתוך אותו שדה טראומטי. הדילמות שמציגה Kaye-Tzadok הן מעשיות מאוד ורלוונטיות לכל מי שמוביל קבוצות בתקופות קשות.",
+  "מפת האבחון היא כלי פרקטי שאפשר להחזיק בראש במהלך ישיבה, סדנה או הנחיה. שמונה הממדים יחד נותנים תמונה מלאה יותר.",
+  "התרחיש של הצוות השקט מדי הוא אחד הנפוצים ביותר בארגונים. שקט אינו בהכרח הסכמה — לעיתים קרובות הוא ביטוי לחוסר בטיחות.",
+  "ההתערבות המדויקת מתחילה בשיום — נתינת מילים למה שנוכח בחדר. מכאן ניתן להתקדם לייצוב מסגרת, הרחבת קולות ועוד.",
+  "הלומדה מבוססת על ספרות עדכנית ומקורות קלאסיים. מומלץ לקרוא את המקורות המלאים להעמקה."
+]
+</script>
+
+<style>
+  :root {
+    --bg: #0D1B2A;
+    --surface: #162236;
+    --surface2: #1E2F45;
+    --border: rgba(255,255,255,0.08);
+    --gold: oklch(0.75 0.14 82);
+    --gold-dim: oklch(0.75 0.14 82 / 0.15);
+    --teal: oklch(0.65 0.12 195);
+    --teal-dim: oklch(0.65 0.12 195 / 0.12);
+    --rose: oklch(0.65 0.14 15);
+    --text: #F0EDE8;
+    --text-muted: rgba(240,237,232,0.55);
+    --text-faint: rgba(240,237,232,0.3);
+    --font: 'Heebo', sans-serif;
+    --slide-w: 1920px;
+    --slide-h: 1080px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #080f18;
+    font-family: var(--font);
+    color: var(--text);
+  }
+
+  deck-stage {
+    --deck-bg: #080f18;
+  }
+
+  /* ===================== SLIDE BASE ===================== */
+  section {
+    width: var(--slide-w);
+    height: var(--slide-h);
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    direction: rtl;
+  }
+
+  /* Decorative noise texture */
+  section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  section > * { position: relative; z-index: 1; }
+
+  /* ===================== NAV BAR ===================== */
+  .slide-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 64px 0;
+    flex-shrink: 0;
+  }
+
+  .nav-logo {
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .nav-logo::before {
+    content: '';
+    width: 20px;
+    height: 2px;
+    background: var(--gold);
+    display: block;
+  }
+
+  .nav-dots {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .nav-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: background 0.3s, transform 0.3s;
+  }
+
+  .nav-dot.active {
+    background: var(--gold);
+    transform: scale(1.4);
+  }
+
+  .nav-dot.visited {
+    background: oklch(0.75 0.14 82 / 0.4);
+  }
+
+  .slide-num {
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--text-faint);
+    letter-spacing: 0.08em;
+    font-variant-numeric: tabular-nums;
+    direction: ltr;
+  }
+
+  /* ===================== SLIDE 1 — TITLE ===================== */
+  .slide-title {
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 160px;
+    gap: 0;
+  }
+
+  .slide-title .bg-accent {
+    position: absolute;
+    top: -200px;
+    left: -200px;
+    width: 900px;
+    height: 900px;
+    background: radial-gradient(circle, oklch(0.65 0.12 195 / 0.06) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .slide-title .bg-accent2 {
+    position: absolute;
+    bottom: -300px;
+    right: -100px;
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, oklch(0.75 0.14 82 / 0.07) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .title-eyebrow {
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    color: var(--teal);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .title-eyebrow::after {
+    content: '';
+    flex: 0 0 60px;
+    height: 1px;
+    background: var(--teal);
+    opacity: 0.5;
+  }
+
+  .title-h1 {
+    font-size: 128px;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--text);
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+  }
+
+  .title-h1 span { color: var(--gold); }
+
+  .title-h2 {
+    font-size: 32px;
+    font-weight: 300;
+    color: var(--text-muted);
+    margin-bottom: 72px;
+    letter-spacing: 0.01em;
+  }
+
+  .title-desc {
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--text-muted);
+    max-width: 660px;
+    line-height: 1.7;
+    border-right: 3px solid var(--gold);
+    padding-right: 28px;
+    margin-bottom: 80px;
+  }
+
+  .title-tags {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    padding: 8px 20px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--text-muted);
+    background: var(--surface);
+    letter-spacing: 0.03em;
+  }
+
+  .title-visual {
+    position: absolute;
+    left: 120px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 420px;
+    height: 420px;
+    opacity: 0.12;
+  }
+
+  /* ===================== SLIDE CONTENT BASE ===================== */
+  .slide-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 40px 80px 56px;
+    overflow: hidden;
+  }
+
+  .slide-header {
+    margin-bottom: 48px;
+    flex-shrink: 0;
+  }
+
+  .slide-header h2 {
+    font-size: 52px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+
+  .slide-header .subtitle {
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--text-muted);
+    line-height: 1.5;
+    max-width: 900px;
+  }
+
+  .gold-line {
+    width: 56px;
+    height: 4px;
+    background: var(--gold);
+    border-radius: 2px;
+    margin-bottom: 20px;
+  }
+
+  /* ===================== CARDS GRID ===================== */
+  .cards-grid {
+    display: grid;
+    gap: 24px;
+    flex: 1;
+    align-content: start;
+  }
+
+  .cards-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .cards-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .cards-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+    cursor: default;
+  }
+
+  .card:hover {
+    border-color: oklch(0.75 0.14 82 / 0.35);
+    transform: translateY(-2px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.3);
+  }
+
+  .card.gold-accent { border-top: 3px solid var(--gold); }
+  .card.teal-accent { border-top: 3px solid var(--teal); }
+  .card.rose-accent { border-top: 3px solid var(--rose); }
+
+  .card-num {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  .card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 4px;
+  }
+
+  .card-icon.gold-bg { background: var(--gold-dim); }
+  .card-icon.teal-bg { background: var(--teal-dim); }
+
+  .card h3 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  .card p, .card li {
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+
+  .card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0;
+  }
+
+  .card li::before {
+    content: '•';
+    color: var(--gold);
+    margin-left: 8px;
+    font-size: 24px;
+  }
+
+  /* ===================== TWO-COL LAYOUT ===================== */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    flex: 1;
+    align-items: start;
+  }
+
+  .col-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 40px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .col-section h3 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .col-section h3 .badge {
+    font-size: 24px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.08em;
+  }
+
+  .badge.gold { background: var(--gold-dim); color: var(--gold); }
+  .badge.teal { background: var(--teal-dim); color: var(--teal); }
+
+  .col-section p, .col-section li {
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  .col-section ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0;
+    margin-top: 8px;
+  }
+
+  .col-section li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .col-section li::before {
+    content: '←';
+    color: var(--gold);
+    flex-shrink: 0;
+    margin-top: 2px;
+    font-size: 24px;
+  }
+
+  .col-section.teal-border { border-top: 3px solid var(--teal); }
+  .col-section.gold-border { border-top: 3px solid var(--gold); }
+
+  .divider-label {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    padding: 16px 0;
+    grid-column: 1 / -1;
+    display: none;
+  }
+
+  /* ===================== QUOTE BLOCK ===================== */
+  .quote-block {
+    background: var(--surface2);
+    border-right: 4px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    padding: 24px 32px;
+    margin-top: auto;
+  }
+
+  .quote-block p {
+    font-size: 24px;
+    font-style: italic;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .quote-block cite {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-faint);
+    letter-spacing: 0.05em;
+    display: block;
+    margin-top: 10px;
+  }
+
+  /* ===================== TAKEAWAY BAR ===================== */
+  .takeaway {
+    background: linear-gradient(135deg, oklch(0.75 0.14 82 / 0.1), oklch(0.65 0.12 195 / 0.06));
+    border: 1px solid oklch(0.75 0.14 82 / 0.2);
+    border-radius: 10px;
+    padding: 22px 32px;
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+  }
+
+  .takeaway .tk-label {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    text-transform: uppercase;
+    white-space: nowrap;
+    padding: 4px 12px;
+    background: var(--gold-dim);
+    border-radius: 4px;
+  }
+
+  .takeaway p {
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  /* ===================== DIAGNOSTIC MAP ===================== */
+  .diag-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    flex: 1;
+    align-content: stretch;
+  }
+
+  .diag-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .diag-item:hover {
+    border-color: oklch(0.75 0.14 82 / 0.3);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  }
+
+  .diag-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: var(--gold-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--gold);
+    flex-shrink: 0;
+  }
+
+  .diag-item h4 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .diag-item p {
+    font-size: 24px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  /* ===================== QUIZ SLIDE ===================== */
+  .quiz-wrap {
+    flex: 1;
+    display: flex;
+    gap: 60px;
+    align-items: flex-start;
+  }
+
+  .quiz-scenario {
+    flex: 0 0 480px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .scenario-label {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--teal);
+    text-transform: uppercase;
+  }
+
+  .quiz-scenario h3 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .quiz-scenario p {
+    font-size: 24px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  .quiz-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .quiz-question {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .quiz-option {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 28px;
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    user-select: none;
+  }
+
+  .quiz-option:hover:not(.disabled) {
+    border-color: oklch(0.65 0.12 195 / 0.5);
+    background: var(--surface2);
+    transform: translateX(-3px);
+  }
+
+  .quiz-option.selected-correct {
+    border-color: oklch(0.6 0.15 145);
+    background: oklch(0.6 0.15 145 / 0.08);
+  }
+
+  .quiz-option.selected-wrong {
+    border-color: var(--rose);
+    background: oklch(0.65 0.14 15 / 0.08);
+  }
+
+  .quiz-option.reveal-correct {
+    border-color: oklch(0.6 0.15 145 / 0.4);
+    background: oklch(0.6 0.15 145 / 0.04);
+  }
+
+  .quiz-option.disabled { cursor: default; }
+
+  .opt-letter {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: var(--surface2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .selected-correct .opt-letter { background: oklch(0.6 0.15 145 / 0.25); color: oklch(0.6 0.15 145); }
+  .selected-wrong .opt-letter { background: oklch(0.65 0.14 15 / 0.25); color: var(--rose); }
+  .reveal-correct .opt-letter { background: oklch(0.6 0.15 145 / 0.12); color: oklch(0.65 0.15 145); }
+
+  .opt-text {
+    font-size: 24px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    padding-top: 6px;
+    flex: 1;
+  }
+
+  .quiz-feedback {
+    background: oklch(0.6 0.15 145 / 0.08);
+    border: 1px solid oklch(0.6 0.15 145 / 0.25);
+    border-radius: 10px;
+    padding: 24px 28px;
+    display: none;
+    gap: 14px;
+    flex-direction: column;
+    margin-top: 4px;
+  }
+
+  .quiz-feedback.show { display: flex; }
+
+  .feedback-label {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: oklch(0.65 0.15 145);
+    text-transform: uppercase;
+  }
+
+  .quiz-feedback p {
+    font-size: 24px;
+    color: var(--text);
+    line-height: 1.65;
+  }
+
+  /* ===================== ACTIONS SLIDE ===================== */
+  .actions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+  }
+
+  .action-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 36px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .action-item:hover {
+    border-color: oklch(0.75 0.14 82 / 0.3);
+    transform: translateX(-4px);
+  }
+
+  .action-num {
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--gold);
+    flex-shrink: 0;
+    width: 48px;
+    text-align: center;
+    opacity: 0.6;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .action-content h4 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .action-content p {
+    font-size: 24px;
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+
+  .action-divider {
+    width: 1px;
+    height: 40px;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+
+  /* ===================== SOURCES SLIDE ===================== */
+  .sources-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    flex: 1;
+  }
+
+  .source-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: border-color 0.2s;
+  }
+
+  .source-card:hover {
+    border-color: oklch(0.75 0.14 82 / 0.3);
+  }
+
+  .source-authors {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 0.03em;
+  }
+
+  .source-title {
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  .source-year {
+    font-size: 24px;
+    color: var(--text-faint);
+    margin-top: 4px;
+  }
+
+  /* ===================== TOC SLIDE ===================== */
+  .toc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    flex: 1;
+  }
+
+  .toc-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px 32px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .toc-item:hover {
+    border-color: oklch(0.75 0.14 82 / 0.3);
+    transform: translateY(-2px);
+  }
+
+  .toc-idx {
+    font-size: 36px;
+    font-weight: 900;
+    color: var(--text-faint);
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+
+  .toc-text h4 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .toc-text p {
+    font-size: 24px;
+    color: var(--text-muted);
+  }
+
+  /* ===================== TRAUMA SLIDE ===================== */
+  .dilemmas-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    flex: 1;
+    align-content: start;
+  }
+
+  .dilemma-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 36px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .dilemma-vs {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    padding: 6px 14px;
+    background: var(--surface2);
+    border-radius: 20px;
+  }
+
+  .dilemma-card h4 {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  .dilemma-card h4 span {
+    color: var(--gold);
+  }
+
+  .dilemma-card p {
+    font-size: 24px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* ===================== TWEAKS PANEL ===================== */
+  #tweaks-panel {
+    position: fixed;
+    bottom: 80px;
+    left: 24px;
+    width: 280px;
+    background: #0D1B2A;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 20px;
+    z-index: 9999;
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.6);
+    font-family: var(--font);
+    direction: rtl;
+  }
+
+  #tweaks-panel h4 {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tweak-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .tweak-row label {
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--text-muted);
+  }
+
+  .tweak-row select, .tweak-row input[type=range] {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    padding: 6px 10px;
+    font-size: 24px;
+    font-family: var(--font);
+    cursor: pointer;
+  }
+
+  .tweak-row input[type=range] {
+    padding: 0;
+    accent-color: var(--gold);
+  }
+
+  .color-swatches {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+
+  .swatch {
+    height: 28px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .swatch:hover, .swatch.active { border-color: white; transform: scale(1.05); }
+
+  /* ===================== SCENARIO SLIDES ===================== */
+  .scen-layout {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 36px;
+    overflow: hidden;
+    align-items: start;
+  }
+
+  .scen-left {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    height: 100%;
+  }
+
+  .scen-tag {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--teal);
+    text-transform: uppercase;
+  }
+
+  .scen-left h3 {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  .scen-left p {
+    font-size: 24px;
+    color: var(--text-muted);
+    line-height: 1.65;
+    flex: 1;
+  }
+
+  .scen-concept {
+    padding: 16px 20px;
+    background: var(--surface2);
+    border-radius: 8px;
+    font-size: 24px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    border-right: 3px solid var(--gold);
+  }
+
+  .scen-right {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .q-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: opacity 0.4s, transform 0.4s;
+  }
+
+  .q-block.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(12px);
+  }
+
+  .q-block.visible {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0);
+  }
+
+  .q-label {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .q-label .q-step {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--gold-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--gold);
+  }
+
+  .q-block h4 {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .q-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .q-opt {
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 18px;
+    cursor: pointer;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    user-select: none;
+  }
+
+  .q-opt:hover:not(.disabled) {
+    border-color: oklch(0.65 0.12 195 / 0.5);
+    transform: translateY(-1px);
+  }
+
+  .q-opt.correct { border-color: oklch(0.6 0.15 145); background: oklch(0.6 0.15 145 / 0.08); }
+  .q-opt.wrong   { border-color: var(--rose); background: oklch(0.65 0.14 15 / 0.08); }
+  .q-opt.reveal  { border-color: oklch(0.6 0.15 145 / 0.35); }
+  .q-opt.disabled { cursor: default; }
+
+  .q-ltr {
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+
+  .q-opt.correct .q-ltr { background: oklch(0.6 0.15 145 / 0.2); color: oklch(0.6 0.15 145); }
+  .q-opt.wrong   .q-ltr { background: oklch(0.65 0.14 15 / 0.2); color: var(--rose); }
+  .q-opt.reveal  .q-ltr { background: oklch(0.6 0.15 145 / 0.1); color: oklch(0.65 0.15 145); }
+
+  .q-opt-text {
+    font-size: 24px;
+    color: var(--text-muted);
+    line-height: 1.45;
+    padding-top: 2px;
+  }
+
+  .q-fb {
+    font-size: 24px;
+    color: var(--text);
+    line-height: 1.55;
+    padding: 14px 18px;
+    border-radius: 8px;
+    display: none;
+    background: oklch(0.6 0.15 145 / 0.06);
+    border: 1px solid oklch(0.6 0.15 145 / 0.2);
+  }
+  .q-fb.show { display: block; }
+  .q-fb.wrong-fb { background: oklch(0.65 0.14 15 / 0.06); border-color: oklch(0.65 0.14 15 / 0.2); }
+
+  /* ===================== SCENARIOS HUB ===================== */
+  .hub-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    flex: 1;
+  }
+
+  .hub-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hub-card::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; left: 0;
+    height: 3px;
+    background: var(--gold);
+  }
+
+  .hub-card:hover {
+    border-color: oklch(0.75 0.14 82 / 0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+  }
+
+  .hub-num {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-faint);
+  }
+
+  .hub-card h3 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .hub-card p {
+    font-size: 24px;
+    color: var(--text-muted);
+    line-height: 1.55;
+    flex: 1;
+  }
+
+  .hub-concept-tag {
+    display: inline-block;
+    padding: 5px 14px;
+    background: var(--gold-dim);
+    border-radius: 20px;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--gold);
+  }
+
+  .hub-done {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: oklch(0.6 0.15 145 / 0.15);
+    border: 2px solid oklch(0.6 0.15 145 / 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: oklch(0.6 0.15 145);
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .hub-done.show { opacity: 1; }
+
+  /* ===================== WORKBOOK ===================== */
+  .wb-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    flex: 1;
+  }
+
+  .wb-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: border-color 0.2s;
+  }
+
+  .wb-item:focus-within {
+    border-color: oklch(0.75 0.14 82 / 0.5);
+  }
+
+  .wb-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--gold-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--gold);
+    flex-shrink: 0;
+  }
+
+  .wb-item h4 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .wb-item textarea {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-family: var(--font);
+    font-size: 24px;
+    color: var(--text);
+    line-height: 1.55;
+    resize: none;
+    outline: none;
+    min-height: 100px;
+    transition: border-color 0.2s;
+    direction: rtl;
+  }
+
+  .wb-item textarea:focus {
+    border-color: oklch(0.75 0.14 82 / 0.5);
+  }
+
+  .wb-item textarea::placeholder {
+    color: var(--text-faint);
+  }
+
+  .wb-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-top: 8px;
+    flex-shrink: 0;
+  }
+
+  .wb-btn {
+    padding: 12px 32px;
+    border-radius: 8px;
+    background: var(--gold-dim);
+    border: 1px solid oklch(0.75 0.14 82 / 0.3);
+    color: var(--gold);
+    font-family: var(--font);
+    font-size: 24px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+  }
+
+  .wb-btn:hover { background: oklch(0.75 0.14 82 / 0.25); transform: translateY(-1px); }
+
+  .wb-status {
+    font-size: 24px;
+    color: oklch(0.6 0.15 145);
+    font-weight: 500;
+    display: none;
+  }
+
+  /* ===================== SUMMARY ===================== */
+  .summary-layout {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  .score-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 48px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+    text-align: center;
+  }
+
+  .score-ring {
+    width: 180px;
+    height: 180px;
+    position: relative;
+  }
+
+  .score-ring svg {
+    transform: rotate(-90deg);
+    overflow: visible;
+  }
+
+  .score-ring .ring-bg {
+    fill: none;
+    stroke: var(--surface2);
+    stroke-width: 12;
+  }
+
+  .score-ring .ring-fill {
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 12;
+    stroke-linecap: round;
+    stroke-dasharray: 502;
+    stroke-dashoffset: 502;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .score-num {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 48px;
+    font-weight: 900;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .score-num span {
+    font-size: 24px;
+    color: var(--text-muted);
+    display: block;
+    font-weight: 400;
+  }
+
+  .score-label {
+    font-size: 24px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .score-msg {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--gold);
+    text-align: center;
+  }
+
+  .summary-right {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .summary-right h3 {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .scenario-scores {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .scen-score-row {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .scen-score-title {
+    flex: 1;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .scen-score-dots {
+    display: flex;
+    gap: 8px;
+  }
+
+  .scen-dot {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+  }
+
+  .scen-dot.correct { background: oklch(0.6 0.15 145 / 0.2); border-color: oklch(0.6 0.15 145); color: oklch(0.6 0.15 145); }
+  .scen-dot.wrong   { background: oklch(0.65 0.14 15 / 0.15); border-color: var(--rose); color: var(--rose); }
+
+</style>
+</head>
+<body>
+
+<!-- ===== TWEAKS PANEL ===== -->
+<div id="tweaks-panel">
+  <h4>Tweaks</h4>
+  <div class="tweak-row">
+    <label>צבע הדגשה</label>
+    <div class="color-swatches">
+      <div class="swatch active" data-accent="gold" style="background: oklch(0.75 0.14 82)" title="זהב"></div>
+      <div class="swatch" data-accent="teal" style="background: oklch(0.65 0.12 195)" title="טיל"></div>
+      <div class="swatch" data-accent="rose" style="background: oklch(0.65 0.14 15)" title="ורדרד"></div>
+      <div class="swatch" data-accent="lavender" style="background: oklch(0.65 0.12 280)" title="לבנדר"></div>
+    </div>
+  </div>
+  <div class="tweak-row">
+    <label>רקע</label>
+    <select id="tw-bg">
+      <option value="dark">כהה (ברירת מחדל)</option>
+      <option value="deeper">כהה עמוק</option>
+      <option value="slate">כחול-אפור</option>
+    </select>
+  </div>
+  <div class="tweak-row">
+    <label>גודל טקסט</label>
+    <input type="range" id="tw-scale" min="85" max="115" value="100" step="5">
+  </div>
+</div>
+
+<deck-stage>
+
+  <!-- ===== SLIDE 1: TITLE ===== -->
+  <section data-screen-label="01 Title">
+    <div class="bg-accent"></div>
+    <div class="bg-accent2"></div>
+    <div class="slide-nav">
+      <div class="nav-logo">Group Diagnosis</div>
+      <div class="slide-num">01 / 20</div>
+    </div>
+    <div class="slide-content" style="justify-content: center; padding-top: 20px;">
+      <div class="title-eyebrow">לומדה דיגיטלית</div>
+      <div class="title-h1">אבחון<br><span>קבוצות</span></div>
+      <div class="title-h2">להבין מה קורה מתחת לפני השטח</div>
+      <div class="title-desc">
+        על דינמיקה קבוצתית, ביטחון פסיכולוגי, זהויות, הגנות ומשבר —<br>
+        מצגת למנהלים, מנחים, HR ואנשי פיתוח ארגוני
+      </div>
+      <div class="title-tags">
+        <div class="tag">מנהלים</div>
+        <div class="tag">מנחים</div>
+        <div class="tag">HR</div>
+        <div class="tag">פיתוח ארגוני</div>
+        <div class="tag">פסיכולוגיה קבוצתית</div>
+      </div>
+    </div>
+    <!-- Decorative circle -->
+    <svg class="title-visual" viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="210" cy="210" r="200" stroke="white" stroke-width="1.5" stroke-dasharray="8 8"/>
+      <circle cx="210" cy="210" r="140" stroke="white" stroke-width="1" stroke-dasharray="4 12"/>
+      <circle cx="210" cy="210" r="80" stroke="white" stroke-width="0.8"/>
+      <circle cx="210" cy="80" r="12" fill="white"/>
+      <circle cx="340" cy="270" r="8" fill="white"/>
+      <circle cx="80" cy="300" r="6" fill="white"/>
+      <circle cx="290" cy="140" r="5" fill="white" opacity="0.5"/>
+      <line x1="210" y1="10" x2="210" y2="410" stroke="white" stroke-width="0.5" opacity="0.3"/>
+      <line x1="10" y1="210" x2="410" y2="210" stroke="white" stroke-width="0.5" opacity="0.3"/>
+    </svg>
+  </section>
+
+  <!-- ===== SLIDE 2: TOC ===== -->
+  <section data-screen-label="02 TOC">
+    <div class="slide-nav">
+      <div class="nav-logo">Group Diagnosis</div>
+      <div class="slide-num">02 / 20</div>
+    </div>
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="gold-line"></div>
+        <h2>מה תמצאו בלומדה</h2>
+        <p class="subtitle">שישה נושאים מרכזיים, כלי אבחון מעשי ותרגול אינטראקטיבי</p>
+      </div>
+      <div class="toc-grid">
+        <div class="toc-item">
+          <div class="toc-idx">01</div>
+          <div class="toc-text">
+            <h4>למה לאבחן קבוצה?</h4>
+            <p>ארבע שאלות מנחות לאבחון ראשוני</p>
+          </div>
+        </div>
+        <div class="toc-item">
+          <div class="toc-idx">02</div>
+          <div class="toc-text">
+            <h4>4 עדשות מרכזיות</h4>
+            <p>משימה, יחסים, זהות, חרדה</p>
+          </div>
+        </div>
+        <div class="toc-item">
+          <div class="toc-idx">03</div>
+          <div class="toc-text">
+            <h4>ביטחון פסיכולוגי</h4>
+            <p>מול אקלים פסיכו-סוציאלי רחב</p>
+          </div>
+        </div>
+        <div class="toc-item">
+          <div class="toc-idx">04</div>
+          <div class="toc-text">
+            <h4>זהויות חברתיות</h4>
+            <p>שייכות ומיקום בקבוצה</p>
+          </div>
+        </div>
+        <div class="toc-item">
+          <div class="toc-idx">05</div>
+          <div class="toc-text">
+            <h4>מראה, פיצול והשלכה</h4>
+            <p>מנגנוני הגנה קבוצתיים</p>
+          </div>
+        </div>
+        <div class="toc-item">
+          <div class="toc-idx">06</div>
+          <div class="toc-text">
+            <h4>טראומה משותפת</h4>
+            <p>הובלת קבוצות בזמן משבר</p>
+          </div>
+        </div>
+        <div class="toc-item">
+          <div class="toc-idx">07</div>
+          <div class="toc-text">
+            <h4>מפת אבחון מהירה</h4>
+            <p>8 ממדים לכלי עבודה פרקטי</p>
+          </div>
+        </div>
+        <div class="toc-item">
+          <div class="toc-idx">08</div>
+          <div class="toc-text">
+            <h4>תרגול + התערבות</h4>
+            <p>תרחיש, quiz ופעולות מנחה</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 3: WHY DIAGNOSE ===== -->
+  <section data-screen-label="03 Why Diagnose">
+    <div class="slide-nav">
+      <div class="nav-logo">Group Diagnosis</div>
+      <div class="slide-num">03 / 20</div>
+    </div>
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="gold-line"></div>
+        <h2>למה בכלל לאבחן קבוצה?</h2>
+        <p class="subtitle">אבחון קבוצתי עוזר להבין לא רק מה נאמר — אלא גם מה מתארגן, מה נמנע ומה נחוץ עכשיו</p>
+      </div>
+      <div class="cards-grid cols-3" style="flex:1">
+        <div class="card gold-accent">
+          <div class="card-icon gold-bg">🔍</div>
+          <h3>להבין מה מעכב את הקבוצה</h3>
+          <p>לא כל קושי הוא מקצועי. לעיתים קבוצה נתקעת בגלל פחד, הימנעות, תלות, מתח בין-אישי או עומס רגשי שלא קיבל מקום.</p>
+        </div>
+        <div class="card teal-accent">
+          <div class="card-icon teal-bg">🧭</div>
+          <h3>לזהות מה הקבוצה צריכה עכשיו</h3>
+          <p>יש קבוצות שצריכות יותר מבנה; אחרות צריכות מקום לעיבוד, לשיום רגשי או החזרה למשימה.</p>
+        </div>
+        <div class="card gold-accent">
+          <div class="card-icon gold-bg">🎯</div>
+          <h3>להתאים את ההנחיה או הניהול</h3>
+          <p>אבחון טוב מסייע לבחור אם נכון להציב גבול, לפתוח שיח, לאפשר קונפליקט, לשיים חרדה או לייצב מסגרת.</p>
+        </div>
+      </div>
+      <div class="takeaway" style="margin-top: 28px;">
+        <div class="tk-label">4 שאלות מנחות</div>
+        <p>מהי המשימה הגלויה? · מה מרגישים בחדר? · מי תופס מקום ומי לא נשמע? · מה הקבוצה לא מצליחה להגיד ישירות?</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 4: 4 LENSES ===== -->
+  <section data-screen-label="04 Four Lenses">
+    <div class="slide-nav">
+      <div class="nav-logo">Group Diagnosis</div>
+      <div class="slide-num">04 / 20</div>
+    </div>
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="gold-line"></div>
+        <h2>4 עדשות מרכזיות לאבחון קבוצות</h2>
+        <p class="subtitle">כדאי להסתכל על הקבוצה בו-זמנית דרך משימה, יחסים, זהויות והגנות</p>
+      </div>
+      <div class="cards-grid cols-4" style="flex:1">
+        <div class="card" style="border-top: 3px solid var(--gold);">
+          <div class="card-num">עדשה 1</div>
+          <h3>משימה ומבנה</h3>
+          <ul>
+            <li>האם המטרה ברורה?</li>
+            <li>האם המסגרת יציבה?</li>
+            <li>האם יש גבולות זמן, תפקיד וכללי שיח?</li>
+          </ul>
+        </div>
+        <div class="card" style="border-top: 3px solid var(--teal);">
+          <div class="card-num" style="color:var(--teal)">עדשה 2</div>
+          <h3>יחסים וביטחון</h3>
+          <ul>
+            <li>האם אנשים מרגישים בטוח לדבר?</li>
+            <li>האם מותר לטעות ולשאול?</li>
+            <li>האם יש אמון מספק?</li>
+          </ul>
+        </div>
+        <div class="card" style="border-top: 3px solid oklch(0.65 0.12 280);">
+          <div class="card-num" style="color:oklch(0.65 0.12 280)">עדשה 3</div>
+          <h3>זהות ושייכות</h3>
+          <ul>
+            <li>מי מרגיש בפנים ומי בחוץ?</li>
+            <li>אילו תתי-קבוצות נוצרות?</li>
+            <li>מי מקבל תוקף ומי בשוליים?</li>
+          </ul>
+        </div>
+        <div class="card" style="border-top: 3px solid var(--rose);">
+          <div class="card-num" style="color:var(--rose)">עדשה 4</div>
+          <h3>חרדה והגנות</h3>
+          <ul>
+            <li>האם יש פיצול, האשמה, אידיאליזציה?</li>
+            <li>האם רגש עובר דרך חבר מסוים?</li>
+            <li>האם הומור מגן מפני קושי?</li>
+          </ul>
+        </div>
+      </div>
+      <div class="takeaway">
+        <div class="tk-label">Takeaway</div>
+        <p>אבחון טוב מחבר בין מה שנראה על פני השטח לבין מה שמתארגן ברמת הקבוצה-as-a-whole</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 5: PSYCH SAFETY ===== -->
+  <section data-screen-label="05 Psychological Safety">
+    <div class="slide-nav">
+      <div class="nav-logo">Group Diagnosis</div>
+      <div class="slide-num">05 / 20</div>
+    </div>
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="gold-line"></div>
+        <h2>ביטחון פסיכולוגי מול אקלים פסיכו-סוציאלי</h2>
+        <p class="subtitle">לא מספיק להסתכל רק על החוויה בתוך הקבוצה; צריך לבדוק גם את המסר שהמערכת הרחבה משדרת</p>
+      </div>
+      <div class="two-col">
+        <div class="col-section gold-border">
+          <h3>
+            בתוך הקבוצה
+            <span class="badge gold">Psychological Safety</span>
+          </h3>
+          <p>עד כמה המשתתפים מרגישים שהם יכולים לדבר, לשאול, לטעות ולהביע עמדה בלי להיענש חברתית.</p>
+          <ul>
+            <li>האם אנשים מעלים ספקות?</li>
+            <li>האם שואלים שאלות אמיתיות?</li>
+            <li>האם יש חשש מהשפלה או ביקורת?</li>
+          </ul>
+          <div class="quote-block" style="margin-top: auto;">
+            <p>קבוצה יכולה להיראות שקטה ומסודרת כלפי חוץ — אבל אם אין בה ביטחון פסיכולוגי, ייתכן שהשקט הוא שתיקה מגוננת.</p>
+          </div>
+        </div>
+        <div class="col-section teal-border">
+          <h3>
+            המערכת הרחבה
+            <span class="badge teal">Psychosocial Safety Climate</span>
+          </h3>
+          <p>עד כמה הארגון, המנהלים והתרבות הארגונית משדרים שבריאות נפשית, כבוד ובטיחות פסיכו-חברתית הם ערך אמיתי.</p>
+          <ul>
+            <li>האם wellbeing מתורגם לפעולה?</li>
+            <li>האם הלחץ המערכתי מאפשר שיח בטוח?</li>
+            <li>האם יש גיבוי למי שמעלה קושי?</li>
+          </ul>
+          <div class="quote-block" style="margin-top: auto; border-color: var(--teal);">
+            <p>Dong, Li & Roxas (2024): psychological safety and psychosocial safety climate are both crucial to workers' health, safety and performance.</p>
+            <cite>Dong, R.K., Li, X., & Roxas, H.B. (2024)</cite>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 6: IDENTITIES ===== -->
+  <section data-screen-label="06 Identities">
+    <div class="slide-nav">
+      <div class="nav-logo">Group Diagnosis</div>
+      <div class="slide-num">06 / 20</div>
+    </div>
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="gold-line"></div>
+        <h2>זהויות חברתיות, שייכות ומיקום בקבוצה</h2>
+        <p class="subtitle">קבוצות אינן ניטרליות: מגדר, תפקיד, ותק, שפה, תרבות וסטטוס משפיעים על מי מדבר, מי נקטע ומי נשאר בשוליים</p>
+      </div>
+      <div class="two-col">
+        <div class="col-section gold-border" style="height: auto;">
+          <h3>שאלות אבחון שכדאי לשאול</h3>
+          <ul>
+            <li>מי מדבר ראשון ומי כמעט לא נשמע?</li>
+            <li>מי תופס הכי הרבה מקום ומי נקטע לעיתים קרובות?</li>
+            <li>אילו זהויות מקבלות לגיטימציה בקבוצה?</li>
+            <li>האם יש בריתות, תתי-קבוצות או תחושת 'אנחנו' מול 'הם'?</li>
+            <li>האם יש זהירות מיוחדת מול סמכות, מגדר, ותק או תפקיד?</li>
+          </ul>
+        </div>
+        <div class="col-section teal-border" style="height: auto;">
+          <h3>סימנים אפשריים בחדר</h3>
+          <ul>
+            <li>זהירות מוגברת של משתתפים מסוימים</li>
+            <li>קונפליקט עקיף סביב מעמד, תפקיד או שייכות</li>
+            <li>היעלמות של קולות מסוימים לאחר הערה של משתתף דומיננטי</li>
+            <li>לכידות מדומה שמסתירה הבדלים ורגישויות</li>
+          </ul>
+          <div class="quote-block" style="margin-top: auto; border-color: var(--teal);">
+            <p>מפגש בין זהויות חברתיות מייצר גם משאב וגם מתח שיש לאבחן במרחב הקבוצתי.</p>
+            <cite>Friedman, Shahar, Tal & Gopher (2006)</cite>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 7: MIRROR / SPLITTING ===== -->
+  <section data-screen-label="07 Mirror Splitting Projection">
+    <div class="slide-nav">
+      <div class="nav-logo">Group Diagnosis</div>
+      <div class="slide-num">07 / 20</div>
+    </div>
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="gold-line"></div>
+        <h2>מראה קבוצתית, פיצול והשלכה</h2>
+        <p class="subtitle">לעיתים הקבוצה לא אומרת ישירות את מה שקשה לשאת — אלא מפזרת אותו דרך יחסים, רגשות ותפקידים</p>
+      </div>
+      <div class="cards-grid cols-4" style="flex:1; align-content: stretch;">
+        <div class="card" style="border-right: 3px solid var(--gold);">
+          <div class="card-num">מושג</div>
+          <h3>מראה קבוצתית</h3>
+          <p>הקבוצה משקפת לחבריה מה מותר להרגיש ואילו חלקים של העצמי מקבלים מקום או נשארים מוסתרים.</p>
+        </div>
+        <div class="card" style="border-right: 3px solid var(--teal);">
+          <div class="card-num" style="color:var(--teal)">מושג</div>
+          <h3>פיצול</h3>
+          <p>במצבי חרדה הקבוצה עלולה לחלק את העולם לטובים ורעים, חזקים וחלשים, צודקים ומאיימים.</p>
+        </div>
+        <div class="card" style="border-right: 3px solid oklch(0.65 0.12 280);">
+          <div class="card-num" style="color:oklch(0.65 0.12 280)">מושג</div>
+          <h3>השלכה</h3>
+          <p>רגשות שקשה לשאת עשויים לעבור לחבר אחד או למנחה — והוא נהיה מי שמחזיק את מה שהקבוצה מתקשה לעבד.</p>
+        </div>
+        <div class="card" style="border-right: 3px solid var(--rose);">
+          <div class="card-num" style="color:var(--rose)">תפקיד</div>
+          <h3>תפקיד המנחה</h3>
+          <p>המנחה נדרש לזהות מתי הקבוצה מדברת על נושא — ומתי היא בעצם מבטאת איום, אשמה, חרדה או קונפליקט לא מדובר.</p>
+        </div>
+      </div>
+      <div class="quote-block" style="margin-top: 24px;">
+        <p>Freud (1923/1961) ו-Klein (1946) מציעים שפה להבנת קונפליקט ומנגנוני הגנה; Toder & Weinberg (2006) מדגישים את הקבוצה כמרחב מראה.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 8: TRAUMA ===== -->
+  <section data-screen-label="08 Shared Trauma">
+    <div class="slide-nav">
+      <div class="nav-logo">Group Diagnosis</div>
+      <div class="slide-num">08 / 20</div>
+    </div>
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="gold-line"></div>
+        <h2>קבוצה בזמן טראומה משותפת או משבר</h2>
+        <p class="subtitle">במצבי משבר, המנחה והמשתתפים פועלים בתוך אותו שדה רגשי — ולכן האבחון חייב לכלול גם את ההקשר הרחב</p>
+      </div>
+      <div class="takeaway" style="margin-bottom: 28px;">
+        <div class="tk-label">עיקרון</div>
+        <p>משבר חיצוני אינו נשאר בחוץ: הוא משנה גבולות, קשב, תחושת בטיחות, קצב עבודה, סבילות לקונפליקט והיכולת להחזיק מורכבות</p>
+      </div>
+      <div class="dilemmas-grid">
+        <div class="dilemma-card">
+          <div class="dilemma-vs">דילמה</div>
+          <h4><span>גבולות</span> / גמישות</h4>
+          <p>כמה לשמור על setting קבוע — וכמה להתאים אותו למציאות משתנה.</p>
+        </div>
+        <div class="dilemma-card">
+          <div class="dilemma-vs">דילמה</div>
+          <h4><span>מבנה</span> / כאן-ועכשיו</h4>
+          <p>האם להמשיך בתוכנית או לעצור כדי לתת מקום למה שנוכח בחדר.</p>
+        </div>
+        <div class="dilemma-card">
+          <div class="dilemma-vs">דילמה</div>
+          <h4><span>הרמוניה</span> / קונפליקט</h4>
+          <p>האם הקבוצה שומרת על ביחד מדומה במקום לאפשר מורכבות ומתח.</p>
+        </div>
+        <div class="dilemma-card">
+          <div class="dilemma-vs">דילמה</div>
+          <h4><span>מלחמה</span> / יומיום</h4>
+          <p>כמה לדבר על המציאות החיצונית — וכמה להחזיר לקבוצה תחושת שגרה ותפקוד.</p>
+        </div>
+      </div>
+      <div class="quote-block" style="margin-top: 24px;">
+        <p>הובלה קבוצתית בזמן טראומה המונית דורשת גמישות, רגישות והחזקה של כמה צרכים בו-זמנית — ביטחון, שייכות, עיבוד ותפקוד.</p>
+        <cite>Kaye-Tzadok (2025); Gur (2025) — shared traumatic reality</cite>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 9: DIAGNOSTIC MAP ===== -->
+  <section data-screen-label="09 Diagnostic Map">
+    <div class="slide-nav">
+      <div class="nav-logo">Group Diagnosis</div>
+      <div class="slide-num">09 / 20</div>
+    </div>
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="gold-line"></div>
+        <h2>מפת אבחון קבוצתי מהירה</h2>
+        <p class="subtitle">כלי עבודה פרקטי לישיבה, סדנה, קבוצת למידה או הנחיה</p>
+      </div>
+      <div class="diag-grid">
+        <div class="diag-item">
+          <div class="diag-num">1</div>
+          <h4>משימה</h4>
+          <p>מה הקבוצה אמורה לעשות עכשיו?</p>
+        </div>
+        <div class="diag-item">
+          <div class="diag-num">2</div>
+          <h4>אקלים</h4>
+          <p>מה מרגישים בחדר — ביטחון, מתח, זהירות, תקיעות?</p>
+        </div>
+        <div class="diag-item">
+          <div class="diag-num">3</div>
+          <h4>השתתפות</h4>
+          <p>מי מדבר, מי שותק, מי מוביל, מי נקטע?</p>
+        </div>
+        <div class="diag-item">
+          <div class="diag-num">4</div>
+          <h4>מבנה</h4>
+          <p>האם הגבולות ברורים — זמן, תפקיד, כללי שיח?</p>
+        </div>
+        <div class="diag-item">
+          <div class="diag-num">5</div>
+          <h4>יחסים</h4>
+          <p>יש אמון, תלות, תחרות, ריחוק, לכידות מדומה?</p>
+        </div>
+        <div class="diag-item">
+          <div class="diag-num">6</div>
+          <h4>הגנות</h4>
+          <p>שתיקה, פיצול, האשמה, הומור מוגזם, אידיאליזציה?</p>
+        </div>
+        <div class="diag-item">
+          <div class="diag-num">7</div>
+          <h4>הקשר רחב</h4>
+          <p>מה מהמציאות הארגונית/חברתית נכנס לחדר?</p>
+        </div>
+        <div class="diag-item">
+          <div class="diag-num">8</div>
+          <h4>צעד הבא</h4>
+          <p>לשיים? לייצב? לשאול? להציב גבול? לאפשר שיח?</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== SLIDE 10: SCENARIOS HUB ===== -->
+  <section data-screen-label="10 Scenarios">
+    <div class="slide-nav">
+      <div class="nav-logo">Group Diagnosis</div>
+      <div class="slide-num">10 / 20</div>
+    </div>
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="gold-line"></div>
+        <h2>6 תרחישים לתרגול</h2>
+        <p class="subtitle">כל תרחיש כולל שאלת אבחון ושאלת התערבות — ענו על שתיהן לפני שתמשיכו</p>
+      </div>
+      <div class="hub-grid">
+        <div class="hub-card">
+          <div class="hub-done" id="hd1">✓</div>
+          <div class="hub-num">01</div>
+          <h3>הצוות השקט מדי</h3>
+          <p>כולם מנומסים בפגישה, אבל אחרי — ההתנגדויות צצות בערוצים פרטיים.</p>
+          <span class="hub-concept-tag">ביטחון פסיכולוגי</span>
+        </div>
+        <div class="hub-card">
+          <div class="hub-done" id="hd2">✓</div>
+          <div class="hub-num">02</div>
+          <h3>שק החבטות הקבוצתי</h3>
+          <p>חבר אחד מקבל כל הביקורת. הקבוצה נרגעת — אבל הבעיה נשארת.</p>
+          <span class="hub-concept-tag">השלכה</span>
+        </div>
+        <div class="hub-card">
+          <div class="hub-done" id="hd3">✓</div>
+          <div class="hub-num">03</div>
+          <h3>שני מחנות</h3>
+          <p>הקבוצה מחולקת. כל צד משוכנע שהוא הצד הצודק לחלוטין.</p>
+          <span class="hub-concept-tag">פיצול</span>
+        </div>
+        <div class="hub-card">
+          <div class="hub-done" id="hd4">✓</div>
+          <div class="hub-num">04</div>
+          <h3>המנחה המותקפת</h3>
+          <p>הקבוצה מתחילה לבקר את המנחה — על הגישה, הזמן, "שאין תועלת".</p>
+          <span class="hub-concept-tag">העברה נגדית</span>
+        </div>
+        <div class="hub-card">
+          <div class="hub-done" id="hd5">✓</div>
+          <div class="hub-num">05</div>
+          <h3>לכידות מדומה</h3>
+          <p>כולם מסכימים על הכל — אבל הביצועים יורדים. משהו מוסתר.</p>
+          <span class="hub-concept-tag">הימנעות מקונפליקט</span>
+        </div>
+        <div class="hub-card">
+          <div class="hub-done" id="hd6">✓</div>
+          <div class="hub-num">06</div>
+          <h3>קבוצה בזמן מלחמה</h3>
+          <p>קשיי ריכוז, היעדרויות, ניתוק — הצוות מתנהל בתוך שדה טראומטי.</p>
+          <span class="hub-concept-tag">טראומה משותפת</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- ===== SLIDE 10: SCENARIO 1 ===== -->
+  <section data-screen-label="10 Scenario 1">
+    <div class="slide-nav">
+      <div class="nav-logo">Group Diagnosis</div>
+      <div class="slide-num">10 / 20</div>
+    </div>
+    <div class="slide-content" style="padding-top:32px;">
+      <div class="slide-header" style="margin-bottom:24px;">
+        <div class="gold-line"></div>
+        <h2 style="font-size:40px;">תרחיש 1: הצוות השקט מדי</h2>
+        <p class="subtitle">ביטחון פסיכולוגי</p>
+      </div>
+      <div class="scen-layout">
+        <div class="scen-left">
+          <div class="scen-tag">תרחיש</div>
+          <h3>הצוות השקט מדי</h3>
+          <p>בפגישות צוות כולם מנומסים מאוד. כמעט אין מחלוקות, כמעט לא נשאלות שאלות, ורק אחרי הפגישה עולות התנגדויות בערוצים פרטיים.</p>
+          <div class="scen-concept">מושג מפתח: <strong>Psychological Safety</strong> — עד כמה המשתתפים מרגישים בטוח לדבר, לשאול ולהביע ספק.</div>
+        </div>
+        <div class="scen-right">
+          <div class="q-block" id="s1q1">
+            <div class="q-label"><div class="q-step">1</div> שאלת אבחון</div>
+            <h4>מהי ההשערה האבחונית החזקה ביותר?</h4>
+            <div class="q-options" id="s1q1opts">
+            <div class="q-opt" data-idx="0" onclick="handleScen('s1','q1',0,1)">
+              <div class="q-ltr">א</div>
+              <div class="q-opt-text">הקבוצה מגובשת ולכן אין צורך להתערב</div>
+            </div>
+            <div class="q-opt" data-idx="1" onclick="handleScen('s1','q1',1,1)">
+              <div class="q-ltr">ב</div>
+              <div class="q-opt-text">ייתכן שחסר ביטחון פסיכולוגי — הקונפליקט עבר לערוצים לא ישירים</div>
+            </div>
+            <div class="q-opt" data-idx="2" onclick="handleScen('s1','q1',2,1)">
+              <div class="q-ltr">ג</div>
+              <div class="q-opt-text">מדובר בצוות יעיל במיוחד</div>
+            </div>
+            <div class="q-opt" data-idx="3" onclick="handleScen('s1','q1',3,1)">
+              <div class="q-ltr">ד</div>
+              <div class="q-opt-text">אין קשר בין השתיקה לבין מבנה הקבוצה</div>
+            </div></div>
+            <div class="q-fb" id="s1q1fb">נכון. שקט קבוצתי אינו סימן לבריאות — לעיתים הוא ביטוי להיעדר לגיטימציה למחלוקת ולחשש מביקורת.</div>
+          </div>
+          <div class="q-block hidden" id="s1q2">
+            <div class="q-label" style="color:var(--teal)"><div class="q-step" style="background:var(--teal-dim);color:var(--teal)">2</div> שאלת התערבות</div>
+            <h4>מה תעשו כמנחה?</h4>
+            <div class="q-options" id="s1q2opts">
+            <div class="q-opt" data-idx="0" onclick="handleScen('s1','q2',0,1)">
+              <div class="q-ltr">א</div>
+              <div class="q-opt-text">לאשר: "מצוין, הצוות שלנו עובד יפה"</div>
+            </div>
+            <div class="q-opt" data-idx="1" onclick="handleScen('s1','q2',1,1)">
+              <div class="q-ltr">ב</div>
+              <div class="q-opt-text">לשיים: "אני מבחין שאנחנו מסכימים הרבה. מה אנחנו לא אומרים ישירות?"</div>
+            </div>
+            <div class="q-opt" data-idx="2" onclick="handleScen('s1','q2',2,1)">
+              <div class="q-ltr">ג</div>
+              <div class="q-opt-text">לבקש מהצוות לכתוב דוחות פרטניים</div>
+            </div>
+            <div class="q-opt" data-idx="3" onclick="handleScen('s1','q2',3,1)">
+              <div class="q-ltr">ד</div>
+              <div class="q-opt-text">להתעלם — השקט הוא עניין אישי של כל אחד</div>
+            </div></div>
+            <div class="q-fb" id="s1q2fb">שיום הדינמיקה הנסתרת הוא צעד ראשון חיוני. הזמנה לקונפליקט בטוח יוצרת מרחב לשיח אמיתי.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- ===== SLIDE 11: SCENARIO 2 ===== -->
+  <section data-screen-label="11 Scenario 2">
+    <div class="slide-nav">
+      <div class="nav-logo">Group Diagnosis</div>
+      <div class="slide-num">11 / 20</div>
+    </div>
+    <div class="slide-content" style="padding-top:32px;">
+      <div class="slide-header" style="margin-bottom:24px;">
+        <div class="gold-line"></div>
+        <h2 style="font-size:40px;">תרחיש 2: שק החבטות הקבוצתי</h2>
+        <p class="subtitle">השלכה קבוצתית</p>
+      </div>
+      <div class="scen-layout">
+        <div class="scen-left">
+          <div class="scen-tag">תרחיש</div>
+          <h3>שק החבטות הקבוצתי</h3>
+          <p>בקבוצה יש חבר שכל פעם שמשהו לא הולך טוב, שמו עולה ראשון. האחרים נראים רגועים ואפילו מוקלים — אבל הוא נראה מותש ומבודד.</p>
+          <div class="scen-concept">מושג מפתח: <strong>השלכה</strong> — רגשות שקשה לשאת עשויים לעבור לחבר אחד שנהיה "המכיל" של מה שכולם מתקשים לעבד.</div>
+        </div>
+        <div class="scen-right">
+          <div class="q-block" id="s2q1">
+            <div class="q-label"><div class="q-step">1</div> שאלת אבחון</div>
+            <h4>מה עשוי להסביר את הדינמיקה הזו?</h4>
+            <div class="q-options" id="s2q1opts">
+            <div class="q-opt" data-idx="0" onclick="handleScen('s2','q1',0,1)">
+              <div class="q-ltr">א</div>
+              <div class="q-opt-text">החבר פשוט לא מתאים לתפקיד — יש לו בעיות מקצועיות אמיתיות</div>
+            </div>
+            <div class="q-opt" data-idx="1" onclick="handleScen('s2','q1',1,1)">
+              <div class="q-ltr">ב</div>
+              <div class="q-opt-text">ייתכן שהחבר נושא השלכות קבוצתיות — הוא "מחזיק" מה שהקבוצה מתקשה לעבד</div>
+            </div>
+            <div class="q-opt" data-idx="2" onclick="handleScen('s2','q1',2,1)">
+              <div class="q-ltr">ג</div>
+              <div class="q-opt-text">אין משמעות מיוחדת לכך שאותו חבר מוזכר שוב ושוב</div>
+            </div>
+            <div class="q-opt" data-idx="3" onclick="handleScen('s2','q1',3,1)">
+              <div class="q-ltr">ד</div>
+              <div class="q-opt-text">הקבוצה מגיבה נכון לבעיה אובייקטיבית</div>
+            </div></div>
+            <div class="q-fb" id="s2q1fb">נכון. כאשר רגשות קשים לא מעובדים, הם נוטים "לנחות" על חבר פגיע במיוחד — תופעה שקלין תיארה כ"הזדהות השלכתית".</div>
+          </div>
+          <div class="q-block hidden" id="s2q2">
+            <div class="q-label" style="color:var(--teal)"><div class="q-step" style="background:var(--teal-dim);color:var(--teal)">2</div> שאלת התערבות</div>
+            <h4>כמנחה — מה יעזור?</h4>
+            <div class="q-options" id="s2q2opts">
+            <div class="q-opt" data-idx="0" onclick="handleScen('s2','q2',0,1)">
+              <div class="q-ltr">א</div>
+              <div class="q-opt-text">לאשר את הביקורת על החבר ולהמשיך</div>
+            </div>
+            <div class="q-opt" data-idx="1" onclick="handleScen('s2','q2',1,1)">
+              <div class="q-ltr">ב</div>
+              <div class="q-opt-text">להציב גבול לביקורת ולשאול: "מה עוד קשה לנו כקבוצה?"</div>
+            </div>
+            <div class="q-opt" data-idx="2" onclick="handleScen('s2','q2',2,1)">
+              <div class="q-ltr">ג</div>
+              <div class="q-opt-text">להתעלם ולהמתין שהדינמיקה תפסק</div>
+            </div>
+            <div class="q-opt" data-idx="3" onclick="handleScen('s2','q2',3,1)">
+              <div class="q-ltr">ד</div>
+              <div class="q-opt-text">להוציא את החבר מהקבוצה</div>
+            </div></div>
+            <div class="q-fb" id="s2q2fb">הצבת גבול והרחבת השאלה מחזירה אחריות לקבוצה כולה. זה מפחית את ה"שק חבטות" ומאפשר עיבוד אמיתי.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- ===== SLIDE 12: SCENARIO 3 ===== -->
+  <section data-screen-label="12 Scenario 3">
+    <div class="slide-nav">
+      <div class="nav-logo">Group Diagnosis</div>
+      <div class="slide-num">12 / 20</div>
+    </div>
+    <div class="slide-content" style="padding-top:32px;">
+      <div class="slide-header" style="margin-bottom:24px;">
+        <div class="gold-line"></div>
+        <h2 style="font-size:40px;">תרחיש 3: שני מחנות</h2>
+        <p class="subtitle">פיצול קבוצתי</p>
+      </div>
+      <div class="scen-layout">
+        <div class="scen-left">
+          <div class="scen-tag">תרחיש</div>
+          <h3>שני מחנות</h3>
+          <p>הקבוצה מחולקת לשתי קבוצות שמדברות האחת על השנייה אך לעיתים נדירות ביניהן. כל צד בטוח שהוא צודק לחלוטין — ושהצד השני הוא הבעיה.</p>
+          <div class="scen-concept">מושג מפתח: <strong>פיצול</strong> — במצבי חרדה, הקבוצה מחלקת את העולם ל"טובים" ו"רעים". כל צד רואה עצמו נקי מאשמה.</div>
+        </div>
+        <div class="scen-right">
+          <div class="q-block" id="s3q1">
+            <div class="q-label"><div class="q-step">1</div> שאלת אבחון</div>
+            <h4>מה עשוי להסביר את הדינמיקה?</h4>
+            <div class="q-options" id="s3q1opts">
+            <div class="q-opt" data-idx="0" onclick="handleScen('s3','q1',0,1)">
+              <div class="q-ltr">א</div>
+              <div class="q-opt-text">לצד אחד יש צדק אובייקטיבי — יש לתמוך בו</div>
+            </div>
+            <div class="q-opt" data-idx="1" onclick="handleScen('s3','q1',1,1)">
+              <div class="q-ltr">ב</div>
+              <div class="q-opt-text">ייתכן שמתרחש פיצול — הקבוצה מחלקת את העולם לטובים ורעים כהגנה מפני חרדה</div>
+            </div>
+            <div class="q-opt" data-idx="2" onclick="handleScen('s3','q1',2,1)">
+              <div class="q-ltr">ג</div>
+              <div class="q-opt-text">זוהי תחרות מקצועית בריאה — אין צורך להתערב</div>
+            </div>
+            <div class="q-opt" data-idx="3" onclick="handleScen('s3','q1',3,1)">
+              <div class="q-ltr">ד</div>
+              <div class="q-opt-text">אנשים שונים יכולים להסכים לא להסכים; אין כאן בעיה</div>
+            </div></div>
+            <div class="q-fb" id="s3q1fb">נכון. פיצול הוא מנגנון הגנה שמפשט מציאות מורכבת. הוא מגן על החרדה אבל פוגע ביכולת לחשוב יחד.</div>
+          </div>
+          <div class="q-block hidden" id="s3q2">
+            <div class="q-label" style="color:var(--teal)"><div class="q-step" style="background:var(--teal-dim);color:var(--teal)">2</div> שאלת התערבות</div>
+            <h4>כמנחה — מה יעזור?</h4>
+            <div class="q-options" id="s3q2opts">
+            <div class="q-opt" data-idx="0" onclick="handleScen('s3','q2',0,1)">
+              <div class="q-ltr">א</div>
+              <div class="q-opt-text">לתמוך בצד שנראה יותר צודק</div>
+            </div>
+            <div class="q-opt" data-idx="1" onclick="handleScen('s3','q2',1,1)">
+              <div class="q-ltr">ב</div>
+              <div class="q-opt-text">לאפשר מורכבות — להחזיק גם קונפליקט וגם לכידות; לשאול מה מתחת לפיצול</div>
+            </div>
+            <div class="q-opt" data-idx="2" onclick="handleScen('s3','q2',2,1)">
+              <div class="q-ltr">ג</div>
+              <div class="q-opt-text">להפריד את שתי הקבוצות לצמיתות</div>
+            </div>
+            <div class="q-opt" data-idx="3" onclick="handleScen('s3','q2',3,1)">
+              <div class="q-ltr">ד</div>
+              <div class="q-opt-text">להתעלם — הפיצול יפתר עם הזמן</div>
+            </div></div>
+            <div class="q-fb" id="s3q2fb">המנחה שמחזיק את שני הצדדים בלי לבחור — עוצר את הפיצול. השאלה "מה אנחנו מגנים על עצמנו מפניו?" עוזרת לגשת לחרדה.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- ===== SLIDE 13: SCENARIO 4 ===== -->
+  <section data-screen-label="13 Scenario 4">
+    <div class="slide-nav">
+      <div class="nav-logo">Group Diagnosis</div>
+      <div class="slide-num">13 / 20</div>
+    </div>
+    <div class="slide-content" style="padding-top:32px;">
+      <div class="slide-header" style="margin-bottom:24px;">
+        <div class="gold-line"></div>
+        <h2 style="font-size:40px;">תרחיש 4: המנחה המותקפת</h2>
+        <p class="subtitle">העברה והעברה נגדית</p>
+      </div>
+      <div class="scen-layout">
+        <div class="scen-left">
+          <div class="scen-tag">תרחיש</div>
+          <h3>המנחה המותקפת</h3>
+          <p>בכמה מפגשים אחרונים הקבוצה מתחילה לבקר את המנחה — על הזמן, הגישה, "שאין תועלת". המנחה מרגישה תחת מתקפה אישית.</p>
+          <div class="scen-concept">מושג מפתח: <strong>העברה</strong> — הקבוצה עשויה להעביר למנחה רגשות שמקורם בחרדה, כעס או תחושת חוסר שליטה.</div>
+        </div>
+        <div class="scen-right">
+          <div class="q-block" id="s4q1">
+            <div class="q-label"><div class="q-step">1</div> שאלת אבחון</div>
+            <h4>מהי ההשערה האבחונית?</h4>
+            <div class="q-options" id="s4q1opts">
+            <div class="q-opt" data-idx="0" onclick="handleScen('s4','q1',0,1)">
+              <div class="q-ltr">א</div>
+              <div class="q-opt-text">המנחה אכן עושה עבודה גרועה — הביקורת מוצדקת</div>
+            </div>
+            <div class="q-opt" data-idx="1" onclick="handleScen('s4','q1',1,1)">
+              <div class="q-ltr">ב</div>
+              <div class="q-opt-text">ייתכן שהקבוצה מעבירה למנחה רגשות שקשה לשאת — כעס, חרדה, תחושת חוסר שליטה</div>
+            </div>
+            <div class="q-opt" data-idx="2" onclick="handleScen('s4','q1',2,1)">
+              <div class="q-ltr">ג</div>
+              <div class="q-opt-text">הקבוצה צריכה מנחה חדשה</div>
+            </div>
+            <div class="q-opt" data-idx="3" onclick="handleScen('s4','q1',3,1)">
+              <div class="q-ltr">ד</div>
+              <div class="q-opt-text">זהו שלב טבעי בכל קבוצה ואין לו משמעות אבחונית</div>
+            </div></div>
+            <div class="q-fb" id="s4q1fb">נכון. כאשר המנחה הופכת ל"מטרה" — לעיתים זהו ביטוי לקשיים שהקבוצה מתקשה להחזיק בתוכה.</div>
+          </div>
+          <div class="q-block hidden" id="s4q2">
+            <div class="q-label" style="color:var(--teal)"><div class="q-step" style="background:var(--teal-dim);color:var(--teal)">2</div> שאלת התערבות</div>
+            <h4>כמנחה — מה יעשה?</h4>
+            <div class="q-options" id="s4q2opts">
+            <div class="q-opt" data-idx="0" onclick="handleScen('s4','q2',0,1)">
+              <div class="q-ltr">א</div>
+              <div class="q-opt-text">להתגונן ולהסביר בפירוט את הגישה המקצועית</div>
+            </div>
+            <div class="q-opt" data-idx="1" onclick="handleScen('s4','q2',1,1)">
+              <div class="q-ltr">ב</div>
+              <div class="q-opt-text">לשיים: "אני שומעת תסכול רב. בואו נבדוק יחד מה קורה לנו כקבוצה עכשיו"</div>
+            </div>
+            <div class="q-opt" data-idx="2" onclick="handleScen('s4','q2',2,1)">
+              <div class="q-ltr">ג</div>
+              <div class="q-opt-text">לנזוף בקבוצה על חוסר הכבוד</div>
+            </div>
+            <div class="q-opt" data-idx="3" onclick="handleScen('s4','q2',3,1)">
+              <div class="q-ltr">ד</div>
+              <div class="q-opt-text">לסיים את הפגישה ולשלוח הערות בכתב</div>
+            </div></div>
+            <div class="q-fb" id="s4q2fb">שיום עוצר את ההסלמה ומחזיר את הפוקוס לקבוצה. "מה קורה לנו" מזמין רפלקציה במקום הגנה הדדית.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- ===== SLIDE 14: SCENARIO 5 ===== -->
+  <section data-screen-label="14 Scenario 5">
+    <div class="slide-nav">
+      <div class="nav-logo">Group Diagnosis</div>
+      <div class="slide-num">14 / 20</div>
+    </div>
+    <div class="slide-content" style="padding-top:32px;">
+      <div class="slide-header" style="margin-bottom:24px;">
+        <div class="gold-line"></div>
+        <h2 style="font-size:40px;">תרחיש 5: לכידות מדומה</h2>
+        <p class="subtitle">הימנעות מקונפליקט</p>
+      </div>
+      <div class="scen-layout">
+        <div class="scen-left">
+          <div class="scen-tag">תרחיש</div>
+          <h3>לכידות מדומה</h3>
+          <p>הצוות נראה מגובש, חיובי ומסכים על הכל. אף פעם לא מתעוררות מחלוקות. אנשים חייכניים ואנרגטיים — אבל ביצועי הצוות יורדים לאורך חצי שנה.</p>
+          <div class="scen-concept">מושג מפתח: <strong>לכידות מדומה</strong> — הסכמה שמסתירה הבדלים ורגשות לא מעובדים. "נחמד" עלול לעבוד נגד "יעיל".</div>
+        </div>
+        <div class="scen-right">
+          <div class="q-block" id="s5q1">
+            <div class="q-label"><div class="q-step">1</div> שאלת אבחון</div>
+            <h4>מה עשוי להסביר את הפער בין המראה לביצועים?</h4>
+            <div class="q-options" id="s5q1opts">
+            <div class="q-opt" data-idx="0" onclick="handleScen('s5','q1',0,1)">
+              <div class="q-ltr">א</div>
+              <div class="q-opt-text">הצוות בריא מאוד — הירידה בביצועים היא חיצונית</div>
+            </div>
+            <div class="q-opt" data-idx="1" onclick="handleScen('s5','q1',1,1)">
+              <div class="q-ltr">ב</div>
+              <div class="q-opt-text">ייתכן שקיימת לכידות מדומה — ההסכמה מסתירה הבדלים ומחלוקות שלא קיבלו מקום</div>
+            </div>
+            <div class="q-opt" data-idx="2" onclick="handleScen('s5','q1',2,1)">
+              <div class="q-ltr">ג</div>
+              <div class="q-opt-text">הצוות פשוט עייף</div>
+            </div>
+            <div class="q-opt" data-idx="3" onclick="handleScen('s5','q1',3,1)">
+              <div class="q-ltr">ד</div>
+              <div class="q-opt-text">הבעיה היא מנהיגות גרועה</div>
+            </div></div>
+            <div class="q-fb" id="s5q1fb">נכון. קבוצה שלעולם לא מתווכחת — לעיתים מבטאת חרדה מקונפליקט. ההסכמה היא הגנה, לא בריאות.</div>
+          </div>
+          <div class="q-block hidden" id="s5q2">
+            <div class="q-label" style="color:var(--teal)"><div class="q-step" style="background:var(--teal-dim);color:var(--teal)">2</div> שאלת התערבות</div>
+            <h4>כמנחה — מה יעזור?</h4>
+            <div class="q-options" id="s5q2opts">
+            <div class="q-opt" data-idx="0" onclick="handleScen('s5','q2',0,1)">
+              <div class="q-ltr">א</div>
+              <div class="q-opt-text">לחזק עוד את ה"ביחד" ולעודד חגיגות צוות</div>
+            </div>
+            <div class="q-opt" data-idx="1" onclick="handleScen('s5','q2',1,1)">
+              <div class="q-ltr">ב</div>
+              <div class="q-opt-text">להכניס מורכבות — להזמין שאלות קשות, לאפשר מחלוקת, לשאול "מה אנחנו לא אומרים?"</div>
+            </div>
+            <div class="q-opt" data-idx="2" onclick="handleScen('s5','q2',2,1)">
+              <div class="q-ltr">ג</div>
+              <div class="q-opt-text">להתעלם — זה יעבור</div>
+            </div>
+            <div class="q-opt" data-idx="3" onclick="handleScen('s5','q2',3,1)">
+              <div class="q-ltr">ד</div>
+              <div class="q-opt-text">להחליף חברי צוות</div>
+            </div></div>
+            <div class="q-fb" id="s5q2fb">הזמנה לאי-הסכמה בטוחה מחזירה אנרגיה יצירתית. "מה אנחנו נמנעים מלהגיד?" היא שאלת מנחה אמיצה ויעילה.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- ===== SLIDE 15: SCENARIO 6 ===== -->
+  <section data-screen-label="15 Scenario 6">
+    <div class="slide-nav">
+      <div class="nav-logo">Group Diagnosis</div>
+      <div class="slide-num">15 / 20</div>
+    </div>
+    <div class="slide-content" style="padding-top:32px;">
+      <div class="slide-header" style="margin-bottom:24px;">
+        <div class="gold-line"></div>
+        <h2 style="font-size:40px;">תרחיש 6: קבוצה בזמן מלחמה</h2>
+        <p class="subtitle">טראומה משותפת</p>
+      </div>
+      <div class="scen-layout">
+        <div class="scen-left">
+          <div class="scen-tag">תרחיש</div>
+          <h3>קבוצה בזמן מלחמה</h3>
+          <p>מאז פרוץ המלחמה, הצוות מתקשה להתרכז. יש היעדרויות, תגובות רגשיות עזות, וחלק מהחברים נראים "מנותקים" לחלוטין. גם המנחה מרגישה את עצמה בתוך אותו שדה.</p>
+          <div class="scen-concept">מושג מפתח: <strong>Shared Traumatic Reality</strong> — המנחה והמשתתפים מושפעים מאותו משבר. האבחון חייב לכלול את ההקשר הרחב.</div>
+        </div>
+        <div class="scen-right">
+          <div class="q-block" id="s6q1">
+            <div class="q-label"><div class="q-step">1</div> שאלת אבחון</div>
+            <h4>מהי ההבנה האבחונית המדויקת?</h4>
+            <div class="q-options" id="s6q1opts">
+            <div class="q-opt" data-idx="0" onclick="handleScen('s6','q1',0,1)">
+              <div class="q-ltr">א</div>
+              <div class="q-opt-text">הצוות לא מקצועי מספיק — יש לדרוש יותר משמעת</div>
+            </div>
+            <div class="q-opt" data-idx="1" onclick="handleScen('s6','q1',1,1)">
+              <div class="q-ltr">ב</div>
+              <div class="q-opt-text">הצוות פועל בתוך שדה טראומטי משותף — כולם, כולל המנחה, מושפעים</div>
+            </div>
+            <div class="q-opt" data-idx="2" onclick="handleScen('s6','q1',2,1)">
+              <div class="q-ltr">ג</div>
+              <div class="q-opt-text">הבעיות הרגשיות הן אישיות ולא קשורות לעבודה</div>
+            </div>
+            <div class="q-opt" data-idx="3" onclick="handleScen('s6','q1',3,1)">
+              <div class="q-ltr">ד</div>
+              <div class="q-opt-text">צריך לדחות את כל הפגישות עד לסיום המשבר</div>
+            </div></div>
+            <div class="q-fb" id="s6q1fb">נכון. Gur (2025) ו-Kaye-Tzadok (2025) מתארות כיצד המנחה עצמה פועלת בתוך אותו שדה — ולכן האבחון חייב לכלול את ההקשר הרחב.</div>
+          </div>
+          <div class="q-block hidden" id="s6q2">
+            <div class="q-label" style="color:var(--teal)"><div class="q-step" style="background:var(--teal-dim);color:var(--teal)">2</div> שאלת התערבות</div>
+            <h4>כמנחה — מה יעזור?</h4>
+            <div class="q-options" id="s6q2opts">
+            <div class="q-opt" data-idx="0" onclick="handleScen('s6','q2',0,1)">
+              <div class="q-ltr">א</div>
+              <div class="q-opt-text">להמשיך בלוח הזמנים המתוכנן ללא שינוי</div>
+            </div>
+            <div class="q-opt" data-idx="1" onclick="handleScen('s6','q2',1,1)">
+              <div class="q-ltr">ב</div>
+              <div class="q-opt-text">להתאים את ה-setting: לתת מקום לעיבוד, לשיים את הנוכח, לגמש מבנה תוך שמירה על מסגרת</div>
+            </div>
+            <div class="q-opt" data-idx="2" onclick="handleScen('s6','q2',2,1)">
+              <div class="q-ltr">ג</div>
+              <div class="q-opt-text">לא לדבר על המצב ולהתמקד רק במשימות</div>
+            </div>
+            <div class="q-opt" data-idx="3" onclick="handleScen('s6','q2',3,1)">
+              <div class="q-ltr">ד</div>
+              <div class="q-opt-text">לסיים את כל הפגישות עד שיחלוף המשבר</div>
+            </div></div>
+            <div class="q-fb" id="s6q2fb">גמישות תוך שמירה על מסגרת היא המפתח. שיום הנוכח ("אנחנו כולנו בתוך זה") מחזק ביטחון ומאפשר תפקוד.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- ===== SLIDE 17: WORKBOOK ===== -->
+  <section data-screen-label="17 Workbook">
+    <div class="slide-nav">
+      <div class="nav-logo">Group Diagnosis</div>
+      <div class="slide-num">17 / 20</div>
+    </div>
+    <div class="slide-content">
+      <div class="slide-header" style="margin-bottom:24px;">
+        <div class="gold-line"></div>
+        <h2>דף עבודה — מפת אבחון אישית</h2>
+        <p class="subtitle">מלאו את הממצאים שלכם עבור קבוצה ספציפית שאתם מכירים</p>
+      </div>
+      <div class="wb-grid">
+        <div class="wb-item">
+          <div class="wb-num">1</div>
+          <h4>משימה</h4>
+          <textarea id="wb1" placeholder="מה הקבוצה אמורה לעשות עכשיו?"></textarea>
+        </div>
+        <div class="wb-item">
+          <div class="wb-num">2</div>
+          <h4>אקלים</h4>
+          <textarea id="wb2" placeholder="ביטחון, מתח, זהירות, תקיעות?"></textarea>
+        </div>
+        <div class="wb-item">
+          <div class="wb-num">3</div>
+          <h4>השתתפות</h4>
+          <textarea id="wb3" placeholder="מי מדבר, מי שותק, מי מוביל?"></textarea>
+        </div>
+        <div class="wb-item">
+          <div class="wb-num">4</div>
+          <h4>מבנה</h4>
+          <textarea id="wb4" placeholder="גבולות, זמן, תפקידים, כללים?"></textarea>
+        </div>
+        <div class="wb-item">
+          <div class="wb-num">5</div>
+          <h4>יחסים</h4>
+          <textarea id="wb5" placeholder="אמון, תלות, תחרות, ריחוק?"></textarea>
+        </div>
+        <div class="wb-item">
+          <div class="wb-num">6</div>
+          <h4>הגנות</h4>
+          <textarea id="wb6" placeholder="שתיקה, פיצול, האשמה, הומור?"></textarea>
+        </div>
+        <div class="wb-item">
+          <div class="wb-num">7</div>
+          <h4>הקשר רחב</h4>
+          <textarea id="wb7" placeholder="מה מהמציאות הארגונית נכנס לחדר?"></textarea>
+        </div>
+        <div class="wb-item">
+          <div class="wb-num">8</div>
+          <h4>צעד הבא</h4>
+          <textarea id="wb8" placeholder="לשיים? לייצב? לפתוח? להגביל?"></textarea>
+        </div>
+      </div>
+      <div class="wb-actions">
+        <button class="wb-btn" onclick="saveWorkbook()">שמור תצפיות</button>
+        <button class="wb-btn" style="background:transparent;border-color:var(--border);color:var(--text-muted);" onclick="clearWorkbook()">נקה</button>
+        <span class="wb-status" id="wb-status">✓ נשמר בהצלחה</span>
+      </div>
+    </div>
+  </section>
+  <!-- ===== SLIDE 18: SUMMARY ===== -->
+  <section data-screen-label="18 Summary" id="summarySlide">
+    <div class="slide-nav">
+      <div class="nav-logo">Group Diagnosis</div>
+      <div class="slide-num">18 / 20</div>
+    </div>
+    <div class="slide-content">
+      <div class="slide-header" style="margin-bottom:24px;">
+        <div class="gold-line"></div>
+        <h2>סיכום ותוצאות</h2>
+        <p class="subtitle">סיכום ביצועי התרחישים</p>
+      </div>
+      <div class="summary-layout">
+        <div class="score-panel">
+          <div class="score-ring">
+            <svg width="180" height="180" viewBox="0 0 180 180">
+              <circle class="ring-bg" cx="90" cy="90" r="80"/>
+              <circle class="ring-fill" id="scoreRing" cx="90" cy="90" r="80"/>
+            </svg>
+            <div class="score-num" id="scoreNum">0<span>מתוך 12</span></div>
+          </div>
+          <div class="score-label">ניקוד כולל</div>
+          <div class="score-msg" id="scoreMsg">—</div>
+        </div>
+        <div class="summary-right">
+          <h3>פירוט לפי תרחיש</h3>
+          <div class="scenario-scores" id="scenarioScores">
+            <div class="scen-score-row"><div class="scen-score-title">הצוות השקט מדי</div><div class="scen-score-dots"><div class="scen-dot" id="ss1q1"></div><div class="scen-dot" id="ss1q2"></div></div></div>
+            <div class="scen-score-row"><div class="scen-score-title">שק החבטות הקבוצתי</div><div class="scen-score-dots"><div class="scen-dot" id="ss2q1"></div><div class="scen-dot" id="ss2q2"></div></div></div>
+            <div class="scen-score-row"><div class="scen-score-title">שני מחנות</div><div class="scen-score-dots"><div class="scen-dot" id="ss3q1"></div><div class="scen-dot" id="ss3q2"></div></div></div>
+            <div class="scen-score-row"><div class="scen-score-title">המנחה המותקפת</div><div class="scen-score-dots"><div class="scen-dot" id="ss4q1"></div><div class="scen-dot" id="ss4q2"></div></div></div>
+            <div class="scen-score-row"><div class="scen-score-title">לכידות מדומה</div><div class="scen-score-dots"><div class="scen-dot" id="ss5q1"></div><div class="scen-dot" id="ss5q2"></div></div></div>
+            <div class="scen-score-row"><div class="scen-score-title">קבוצה בזמן מלחמה</div><div class="scen-score-dots"><div class="scen-dot" id="ss6q1"></div><div class="scen-dot" id="ss6q2"></div></div></div>
+          </div>
+          <div class="takeaway" style="margin-top:8px;">
+            <div class="tk-label">טיפ</div>
+            <p id="summaryTip">ענו על התרחישים כדי לראות את הציון שלכם</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 11: ACTIONS ===== -->
+  <section data-screen-label="19 Actions">
+    <div class="slide-nav">
+      <div class="nav-logo">Group Diagnosis</div>
+      <div class="slide-num">19 / 20</div>
+    </div>
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="gold-line"></div>
+        <h2>מה אפשר לעשות כמנחה או כמנהל?</h2>
+        <p class="subtitle">אבחון טוב אינו מסתיים בהבנה — אלא מוביל להתערבות מדויקת יותר</p>
+      </div>
+      <div class="actions-list">
+        <div class="action-item">
+          <div class="action-num">1</div>
+          <div class="action-divider"></div>
+          <div class="action-content">
+            <h4>לשיים את מה שקורה</h4>
+            <p>להציע מילים למה שנוכח בחדר: זהירות, מתח, קושי לשאת מחלוקת או עומס.</p>
+          </div>
+        </div>
+        <div class="action-item">
+          <div class="action-num">2</div>
+          <div class="action-divider"></div>
+          <div class="action-content">
+            <h4>לייצב מסגרת</h4>
+            <p>להחזיר גבולות, כללי שיח, זמן ותפקיד — במיוחד בזמן עומס או משבר.</p>
+          </div>
+        </div>
+        <div class="action-item">
+          <div class="action-num">3</div>
+          <div class="action-divider"></div>
+          <div class="action-content">
+            <h4>לאפשר מורכבות</h4>
+            <p>להחזיק גם קונפליקט וגם לכידות; גם מצוקה וגם תפקוד.</p>
+          </div>
+        </div>
+        <div class="action-item">
+          <div class="action-num">4</div>
+          <div class="action-divider"></div>
+          <div class="action-content">
+            <h4>להרחיב קולות</h4>
+            <p>להזמין משתתפים שקטים, לבדוק מי לא קיבל מקום ולהפחית דומיננטיות.</p>
+          </div>
+        </div>
+        <div class="action-item">
+          <div class="action-num">5</div>
+          <div class="action-divider"></div>
+          <div class="action-content">
+            <h4>לחבר בין הקבוצה להקשר</h4>
+            <p>לבדוק מה מגיע מהמציאות הרחבה — הנהלה, ארגון, משבר, זהות או פחד.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 12: SOURCES ===== -->
+  <section data-screen-label="20 Sources">
+    <div class="slide-nav">
+      <div class="nav-logo">Group Diagnosis</div>
+      <div class="slide-num">20 / 20</div>
+    </div>
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="gold-line"></div>
+        <h2>מקורות מרכזיים</h2>
+        <p class="subtitle">הלומדה נבנתה כתיאורטית-יישומית על בסיס ספרות עדכנית וקלאסית בפסיכואנליזה ובפסיכותרפיה קבוצתית</p>
+      </div>
+      <div class="sources-grid">
+        <div class="source-card">
+          <div class="source-authors">Dong, R.K., Li, X., & Roxas, H.B.</div>
+          <div class="source-title">Psychological safety and psychosocial safety climate in workplace</div>
+          <div class="source-year">2024</div>
+        </div>
+        <div class="source-card">
+          <div class="source-authors">Freud, S.</div>
+          <div class="source-title">The ego and the id</div>
+          <div class="source-year">1923/1961</div>
+        </div>
+        <div class="source-card">
+          <div class="source-authors">Friedman, A., Shahar, A., Tal, L., & Gopher, U.</div>
+          <div class="source-title">Encounter between social identities</div>
+          <div class="source-year">2006</div>
+        </div>
+        <div class="source-card">
+          <div class="source-authors">Gur, A.</div>
+          <div class="source-title">Shared trauma and PTSD among Israeli therapists during wartime</div>
+          <div class="source-year">2025</div>
+        </div>
+        <div class="source-card">
+          <div class="source-authors">Kaye-Tzadok, A.</div>
+          <div class="source-title">Navigating group leadership dilemmas in times of mass trauma</div>
+          <div class="source-year">2025</div>
+        </div>
+        <div class="source-card">
+          <div class="source-authors">Klein, M.</div>
+          <div class="source-title">Notes on some schizoid mechanisms</div>
+          <div class="source-year">1946</div>
+        </div>
+        <div class="source-card">
+          <div class="source-authors">Toder, M., & Weinberg, H.</div>
+          <div class="source-title">The group in the land of mirrors</div>
+          <div class="source-year">2006</div>
+        </div>
+        <div class="source-card" style="justify-content: center; align-items: center; text-align: center; background: linear-gradient(135deg, var(--gold-dim), var(--teal-dim));">
+          <div style="font-size:32px; margin-bottom: 8px; opacity: 0.4;">✦</div>
+          <div class="source-title" style="font-size: 24px; font-weight: 600; color: var(--text);">תודה שלמדתם!</div>
+          <div style="font-size: 24px; color: var(--text-muted); margin-top: 6px;">אבחון קבוצות · לומדה דיגיטלית</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</deck-stage>
+
+<script>
+// ===== SCENARIO QUIZ SYSTEM =====
+const SCEN_ANSWERS = {}; // { 's1_q1': true/false, 's1_q2': true/false, ... }
+
+function handleScen(sid, qnum, chosen, correct) {
+  const key = sid + '_' + qnum;
+  if (SCEN_ANSWERS[key] !== undefined) return; // already answered
+
+  const isCorrect = chosen === correct;
+  SCEN_ANSWERS[key] = isCorrect;
+
+  const opts = document.querySelectorAll('#' + sid + qnum + 'opts .q-opt');
+  opts.forEach(o => o.classList.add('disabled'));
+  opts[chosen].classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) opts[correct].classList.add('reveal');
+
+  const fb = document.getElementById(sid + qnum + 'fb');
+  if (fb) {
+    fb.classList.add('show');
+    if (!isCorrect) fb.classList.add('wrong-fb');
+  }
+
+  // If Q1 answered, reveal Q2
+  if (qnum === 'q1') {
+    setTimeout(() => {
+      const q2 = document.getElementById(sid + 'q2');
+      if (q2) { q2.classList.remove('hidden'); q2.classList.add('visible'); }
+    }, 600);
+  }
+
+  // Mark hub card done if both questions answered
+  const n = sid.replace('s','');
+  if (SCEN_ANSWERS['s'+n+'_q1'] !== undefined && SCEN_ANSWERS['s'+n+'_q2'] !== undefined) {
+    const hd = document.getElementById('hd'+n);
+    if (hd) hd.classList.add('show');
+  }
+
+  // Save to localStorage
+  try { localStorage.setItem('gdlm_answers', JSON.stringify(SCEN_ANSWERS)); } catch(e){}
+}
+
+function updateSummary() {
+  let total = 0;
+  for (let s = 1; s <= 6; s++) {
+    for (const q of ['q1','q2']) {
+      const key = 's'+s+'_'+q;
+      const val = SCEN_ANSWERS[key];
+      const dot = document.getElementById('ss'+s+q);
+      if (dot) {
+        if (val === true) { dot.textContent = '✓'; dot.classList.add('correct'); total++; }
+        else if (val === false) { dot.textContent = '✕'; dot.classList.add('wrong'); }
+        else { dot.textContent = ''; }
+      }
+    }
+  }
+
+  const scoreEl = document.getElementById('scoreNum');
+  if (scoreEl) scoreEl.innerHTML = total + '<span>מתוך 12</span>';
+
+  const ring = document.getElementById('scoreRing');
+  if (ring) {
+    const pct = total / 12;
+    ring.style.strokeDashoffset = 502 * (1 - pct);
+  }
+
+  const msg = document.getElementById('scoreMsg');
+  const tip = document.getElementById('summaryTip');
+  if (msg) {
+    if (total === 12) { msg.textContent = 'מושלם! אבחון מומחה'; }
+    else if (total >= 9) { msg.textContent = 'מצוין! כישורי אבחון גבוהים'; }
+    else if (total >= 6) { msg.textContent = 'טוב. יש מקום להעמקה'; }
+    else if (total >= 1) { msg.textContent = 'התחלה טובה — המשיכו לתרגל'; }
+    else { msg.textContent = 'ענו על התרחישים'; }
+  }
+  if (tip) {
+    const unanswered = 12 - Object.keys(SCEN_ANSWERS).length;
+    if (unanswered > 0) tip.textContent = 'עוד ' + unanswered + ' שאלות ללא מענה';
+    else if (total === 12) tip.textContent = 'ענו נכון על כל השאלות — אבחון קבוצות הוא מיומנות שלכם!';
+    else tip.textContent = 'עברו על התרחישים שענו עליהם לא נכון כדי להעמיק את ההבנה.';
+  }
+}
+
+// Restore saved answers
+try {
+  const saved = JSON.parse(localStorage.getItem('gdlm_answers') || '{}');
+  Object.assign(SCEN_ANSWERS, saved);
+  // Re-apply visual state for saved answers
+  for (const key of Object.keys(saved)) {
+    const [sid, qnum] = key.split('_');
+    // We can't easily re-apply without knowing correct answers, so skip visual restore
+    // but update hub done indicators
+  }
+  for (let n = 1; n <= 6; n++) {
+    if (SCEN_ANSWERS['s'+n+'_q1'] !== undefined && SCEN_ANSWERS['s'+n+'_q2'] !== undefined) {
+      const hd = document.getElementById('hd'+n);
+      if (hd) hd.classList.add('show');
+    }
+  }
+} catch(e){}
+
+// Update summary whenever it becomes visible
+const ds = document.querySelector('deck-stage');
+if (ds) ds.addEventListener('slidechange', () => { updateSummary(); });
+updateSummary();
+
+// ===== WORKBOOK =====
+function saveWorkbook() {
+  const data = {};
+  for (let i = 1; i <= 8; i++) {
+    const el = document.getElementById('wb'+i);
+    if (el) data['wb'+i] = el.value;
+  }
+  try { localStorage.setItem('gdlm_workbook', JSON.stringify(data)); } catch(e){}
+  const st = document.getElementById('wb-status');
+  if (st) { st.style.display = 'block'; setTimeout(() => st.style.display = 'none', 2500); }
+}
+
+function clearWorkbook() {
+  for (let i = 1; i <= 8; i++) {
+    const el = document.getElementById('wb'+i);
+    if (el) el.value = '';
+  }
+  try { localStorage.removeItem('gdlm_workbook'); } catch(e){}
+}
+
+// Restore workbook
+try {
+  const wbData = JSON.parse(localStorage.getItem('gdlm_workbook') || '{}');
+  for (const [k,v] of Object.entries(wbData)) {
+    const el = document.getElementById(k);
+    if (el) el.value = v;
+  }
+} catch(e){}
+
+// ===== TWEAKS =====
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accent": "rose",
+  "bg": "dark",
+  "scale": 85
+}/*EDITMODE-END*/;
+
+let tweakState = { ...TWEAK_DEFAULTS };
+
+const accentMap = {
+  gold: { gold: 'oklch(0.75 0.14 82)', teal: 'oklch(0.65 0.12 195)' },
+  teal: { gold: 'oklch(0.65 0.12 195)', teal: 'oklch(0.75 0.14 82)' },
+  rose: { gold: 'oklch(0.65 0.14 15)', teal: 'oklch(0.65 0.12 195)' },
+  lavender: { gold: 'oklch(0.65 0.12 280)', teal: 'oklch(0.65 0.12 195)' }
+};
+
+const bgMap = {
+  dark: { bg: '#0D1B2A', surface: '#162236', surface2: '#1E2F45' },
+  deeper: { bg: '#070D14', surface: '#0F1E2E', surface2: '#172840' },
+  slate: { bg: '#141820', surface: '#1E2430', surface2: '#262D3E' }
+};
+
+function applyTweaks() {
+  const root = document.documentElement;
+  const a = accentMap[tweakState.accent] || accentMap.gold;
+  root.style.setProperty('--gold', a.gold);
+  root.style.setProperty('--gold-dim', a.gold.replace(')', ' / 0.15)'));
+  const b = bgMap[tweakState.bg] || bgMap.dark;
+  root.style.setProperty('--bg', b.bg);
+  root.style.setProperty('--surface', b.surface);
+  root.style.setProperty('--surface2', b.surface2);
+
+  const scale = tweakState.scale / 100;
+  document.querySelectorAll('section').forEach(s => {
+    s.style.fontSize = (scale * 16) + 'px';
+  });
+
+  document.querySelectorAll('.swatch').forEach(sw => {
+    sw.classList.toggle('active', sw.dataset.accent === tweakState.accent);
+  });
+
+  document.getElementById('tw-bg').value = tweakState.bg;
+  document.getElementById('tw-scale').value = tweakState.scale;
+}
+
+applyTweaks();
+
+document.querySelectorAll('.swatch').forEach(sw => {
+  sw.addEventListener('click', () => {
+    tweakState.accent = sw.dataset.accent;
+    applyTweaks();
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { accent: tweakState.accent } }, '*');
+  });
+});
+
+document.getElementById('tw-bg').addEventListener('change', e => {
+  tweakState.bg = e.target.value;
+  applyTweaks();
+  window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { bg: tweakState.bg } }, '*');
+});
+
+document.getElementById('tw-scale').addEventListener('input', e => {
+  tweakState.scale = parseInt(e.target.value);
+  applyTweaks();
+  window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { scale: tweakState.scale } }, '*');
+});
+
+// ===== TWEAKS TOGGLE =====
+window.addEventListener('message', e => {
+  if (e.data?.type === '__activate_edit_mode') {
+    document.getElementById('tweaks-panel').style.display = 'flex';
+  }
+  if (e.data?.type === '__deactivate_edit_mode') {
+    document.getElementById('tweaks-panel').style.display = 'none';
+  }
+});
+
+window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+
+// ===== NAV DOTS (optional visual) =====
+// deck-stage handles navigation; this just syncs dots if present
+</script>
+
+</body>
+</html>
